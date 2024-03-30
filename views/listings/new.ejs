@@ -1,0 +1,22 @@
+<!-- We remove all html,head,title cause in layout folder in boilerplate.ejs   -->
+<!-- we use a library fot this in all page header,footer are same we don't need to write again and again -->
+<!-- only we use as in line (4) -->
+<% layout("/layouts/boilerplate") %>
+<body>
+    <h1>Create a New Listing</h1>
+    <form method="POST" action="/listings">
+        <input name="listing[title]" placeholder="Enter title" type="text">
+        <br><br>
+        <textarea name="listing[description]" placeholder="Enter description" type="text"></textarea>
+        <br><br>
+        <input name="listing[image]" placeholder="Enter image URL/Link" type="text">
+        <br><br>
+        <input name="listing[price]" placeholder="Enter price" type="number">
+        <br><br>
+        <input name="listing[location]" placeholder="Enter location" type="text">
+        <br><br>
+        <input name="listing[country]" placeholder="Enter country" type="text">
+        <br><br>
+        <button>Add</button>
+    </form>
+</body>

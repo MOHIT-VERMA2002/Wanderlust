@@ -1,0 +1,20 @@
+<!-- We remove all html,head,title cause in layout folder in boilerplate.ejs   -->
+<!-- we use a library fot this in all page header,footer are same we don't need to write again and again -->
+<!-- only we use as in line (4) -->
+<% layout("/layouts/boilerplate") %>
+<body>
+    <h3>Listing Details :</h3>
+    <ul>
+        <li><%= listing.title %> </li>
+        <li><%= listing.description %> </li>
+        <li>&#8377;<%= listing.price.toLocaleString("en-IN") %> </li><!-- .toLocaleString("en-IN")=>use for the provide the (,) to the Price No.-->
+        <li><%= listing.location %> </li>
+        <li><%= listing.country %> </li>
+    </ul>
+    <br> 
+    <a href="/listings/<%= listing._id %>/edit">Edit this Listing</a><br><br>
+    <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
+        <button>Delete this Listing</button>
+    </form>
+</body>
+
