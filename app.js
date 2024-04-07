@@ -1,13 +1,14 @@
 const express = require("express"); //require Express
 const app = express();
 const mongoose = require("mongoose");//require mongoose
-const Listing = require("./models/listing.js") //require listing.js from models folder
+const Listing = require("./models/listing.js"); //require listing.js from models folder
 const path = require("path"); //required path for the files
 const methodOverride = require("method-override");//require method-override (npm i method-override)
 const ejsMate = require("ejs-mate");//require ejs-mate >> help to create the layout the templete
 const wrapAsync = require("./utils/wrapAsync.js"); //For the Error-Handling MiddleWare to be required
 const ExpressError = require("./utils/ExpressError.js");
-const { listingSchema } = require("./schema.js");
+const { listingSchema, reviewSchema } = require("./schema.js");
+const Review = require("./models/review.js");
 
 
 //build the connections with mongoodb
@@ -49,7 +50,18 @@ const validateListing = (req,res,next) => {
     } else{
         next();
     }
-} 
+}; 
+
+//Review/Rating Schema
+const validateReview = (req,res,next) => {
+    let {error} = reviewSchema.validate(req.body); 
+    if(error) {
+        let errMsg = error.details.map((el) => el.message).join(",");
+        throw new ExpressError(400, errMsg);
+    } else{
+        next();
+    }
+}; 
 
 
 // Index (Route)
@@ -105,6 +117,22 @@ app.delete("/listings/:id", wrapAsync(async (req,res) => {
     let deletedListing = await Listing.findByIdAndDelete(id);
     console.log(deletedListing);
     res.redirect("/listings");
+}));
+
+// Submitting the Review/Rating by [POST_Route]
+app.post("/listings/:id/reviews", validateReview, wrapAsync(async(req,res) => {
+    let listing = await Listing.findById(req.params.id);
+    let newReview = new Review(req.body.review);
+
+    listing.reviews.push(newReview);
+
+    await newReview.save();
+    await listing.save();
+
+    // console.log("New Review Saved");
+    // res.send("New Review Saved");
+
+    res.redirect(`/listings/${listing._id}`);
 }));
 
 
