@@ -18,7 +18,10 @@
     <%- include("../includes/navbar.ejs") %>
     
     <!--This is use cause we don't need to create header&footer again and again-->
-    <div class="container"><%- body %></div>
+    <div class="container">
+        <%- include("../includes/flash.ejs") %>
+        <%- body %>
+    </div>
 
     <!-- including  footer section-->
     <%- include("../includes/footer.ejs") %>
