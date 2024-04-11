@@ -26,6 +26,10 @@ const listingSchema = new Schema({
       ref: "Review",
     },
   ],
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  }
 });
 
 // Deleting the Reivew which are exists in listing Reviews array

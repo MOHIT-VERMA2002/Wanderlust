@@ -12,8 +12,9 @@ const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
 
 
-const listings = require("./routes/listing.js");
-const reviews = require("./routes/review.js");
+const listingRouter = require("./routes/listing.js");
+const reviewRouter = require("./routes/review.js");
+const userRouter = require("./routes/user.js");
 
 
 //build the connections with mongoodb
@@ -70,22 +71,25 @@ app.use((req, res, next) => {
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
     // console.log(res.locals.success);
+    res.locals.currUser = req.user;
     next();
 });
 
-// Demo_User for the Passport Authentication
-app.get("/demouser", async (req,res) => {
-    let fakeUser = new User({
-        email: "delta@yahoo.com",
-        username: "apna_collage_student"
-    });
+// // Demo_User to check for the Passport Authentication
+// app.get("/demouser", async (req,res) => {
+//     let fakeUser = new User({
+//         email: "delta@yahoo.com",
+//         username: "apna_collage_student"
+//     });
 
-    let registeredUser = await User.register(fakeUser, "delta80@%#");
-    res.send(registeredUser);
-});
+//     let registeredUser = await User.register(fakeUser, "delta80@%#");
+//     res.send(registeredUser);
+// });
 
-app.use("/listings", listings); //this is for all the Routes we created 
-app.use("/listings/:id/reviews", reviews);//this is for all the Review we created/Deleted
+app.use("/listings", listingRouter); //this is for all the Routes we created 
+app.use("/listings/:id/reviews", reviewRouter);//this is for all the Review we created/Deleted
+app.use("/", userRouter);
+
 
 
 // When you visit an undefine Route
